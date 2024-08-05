@@ -1,34 +1,12 @@
-import sqlite3
-from tkinter import Button, Entry
-from config_db import conn
-from helpers import clean_screen, hash_password
+from helpers import hash_password
 from canvas import root, frame
 from main_menu import display_main_menu
+from models import add_user, get_user_login_password, get_users
 
 
 def login(username, password):
     # frame.delete('error')
-    try:
-        cursor = conn.cursor()
-        cursor.execute(
-            """SELECT password
-                FROM users
-                WHERE username = :username
-            """,
-            {"username": username},
-        )
-
-        password_from_db = cursor.fetchone()
-
-        if password_from_db is not None:
-            password_from_db = password_from_db[0]
-        else:
-            password_from_db = None
-    except sqlite3.Error as e:
-        print(e)
-    finally:
-        cursor.close()
-
+    password_from_db = get_user_login_password(username)
     if password_from_db == hash_password(password):
         display_main_menu(username)
     else:
@@ -42,23 +20,6 @@ def login(username, password):
         )
 
 
-def get_users():
-    try:
-        cursor = conn.cursor()
-        cursor.execute(
-            """SELECT username
-                FROM users
-            """
-        )
-        info = cursor.fetchall()
-
-    except sqlite3.Error as e:
-        print(e)
-    finally:
-        cursor.close()
-        return info
-
-
 def register(username, password, repeat_password):
     info_dict = {
         "username": username,
@@ -67,22 +28,7 @@ def register(username, password, repeat_password):
     }
 
     if check_registration(info_dict):
-        try:
-            cursor = conn.cursor()
-            cursor.execute(
-                """INSERT INTO users (username, password)
-                    VALUES (:username, :password)
-                """,
-                {
-                    "username": info_dict["username"],
-                    "password": hash_password(info_dict["password"]),
-                },
-            )
-            conn.commit()
-        except sqlite3.Error as e:
-            print(e)
-        finally:
-            cursor.close()
+        add_user(info_dict["username"], hash_password(info_dict["password"]))
 
         display_main_menu(info_dict["username"])
 
@@ -115,7 +61,7 @@ def check_registration(info):
 
         return False
     for username in get_users():
-        if info["username"] in username:
+        if info["username"] == username[0]:
             frame.create_text(
                 170,
                 320,

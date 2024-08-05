@@ -1,6 +1,6 @@
 from canvas import root
+from models import create_tables
 from startup_menu import render_entry
-from config_db import create_tables
 from encryption import generate_encryption_key
 
 if __name__ == "__main__":

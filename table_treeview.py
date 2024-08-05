@@ -1,9 +1,7 @@
-from canvas import root, frame
 import tkinter as tk
 import tkinter.ttk as ttk
 
 from encryption import decrypt
-from helpers import clean_screen
 
 
 def create_table_with_passwords(root, collection):
@@ -45,11 +43,17 @@ def create_table_with_passwords(root, collection):
     table.heading("email", text="Email")
     table.heading("password", text="Password")
 
-    for row in collection:
-        ps_id, service, username, email, password = row
-
+    for obj in collection:
         table.insert(
-            "", tk.END, values=(ps_id, service, username, email, str(decrypt(password)))
+            "",
+            tk.END,
+            values=(
+                obj.id,
+                obj.service,
+                obj.username,
+                obj.email,
+                str(decrypt(obj.password)),
+            ),
         )
 
     root.rowconfigure(0, weight=1)

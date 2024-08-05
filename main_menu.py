@@ -1,10 +1,8 @@
-import sqlite3
 import tkinter as tk
 
-from tkinter import messagebox
+
 from encryption import decrypt
 from helpers import clean_screen
-from config_db import conn
 from canvas import frame, root
 
 # from table import Table
@@ -14,6 +12,7 @@ from models import (
     get_user_through_password,
     edit_password,
     delete_password,
+    get_users_passwords,
 )
 from table_treeview import create_table_with_passwords
 
@@ -163,24 +162,26 @@ def edit_menu(password_id: int):
 
 
 def list_passwords(username):
-    try:
-        cursor = conn.cursor()
-        cursor.execute(
-            """SELECT ps.id, ps.service, ps.username, ps.email, ps.password
-                FROM passwords AS ps
-                INNER JOIN users ON users.id = ps.user_id
-                WHERE users.username = :username
-                ORDER BY ps.service;
-            """,
-            {"username": username},
-        )
-        info = cursor.fetchall()
+    # try:
+    #     cursor = conn.cursor()
+    #     cursor.execute(
+    #         """SELECT ps.id, ps.service, ps.username, ps.email, ps.password
+    #             FROM passwords AS ps
+    #             INNER JOIN users ON users.id = ps.user_id
+    #             WHERE users.username = :username
+    #             ORDER BY ps.service;
+    #         """,
+    #         {"username": username},
+    #     )
+    #     info = cursor.fetchall()
 
-    except sqlite3.Error as e:
-        print(e)
-    finally:
-        cursor.close()
-        return info  # returns a list of tuples
+    # except sqlite3.Error as e:
+    #     print(e)
+    # finally:
+    #     cursor.close()
+    #     return info  # returns a list of tuples
+
+    return get_users_passwords(username)
 
 
 def display_passwords(username):
