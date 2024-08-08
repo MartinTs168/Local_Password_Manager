@@ -5,7 +5,7 @@ from models import add_user, get_user_login_password, get_users
 
 
 def login(username, password):
-    # frame.delete('error')
+    frame.delete("error")
     password_from_db = get_user_login_password(username)
     if password_from_db == hash_password(password):
         display_main_menu(username)

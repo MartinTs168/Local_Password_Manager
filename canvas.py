@@ -11,14 +11,12 @@ def create_root():
 
 
 def create_frame():
-    frame = Canvas(root, width=810, height= 610)
+    frame = Canvas(root, width=810, height=610)
     frame.grid(row=0, column=0)
     frame.configure(bg="white")
     frame.configure(borderwidth=-2)
 
-    return frame  # not th ebets decision not really needed
-
-
+    return frame
 
 
 root = create_root()

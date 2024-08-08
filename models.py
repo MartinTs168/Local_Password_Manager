@@ -85,7 +85,6 @@ def get_users_passwords(username: str):
         passwords = (
             session.query(Password).join(User).where(User.username == username).all()
         )
-        print(passwords)
         return passwords
 
 

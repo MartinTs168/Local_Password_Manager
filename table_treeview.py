@@ -64,6 +64,6 @@ def create_table_with_passwords(root, collection):
     root.columnconfigure(3, weight=1)
     root.columnconfigure(4, weight=1)
 
-    table.grid(row=1, column=0, columnspan=5, sticky="nsew")
+    table.grid(row=1, column=0, columnspan=4, sticky="nsew")
 
     table.bind("<Button-3>", popup)
